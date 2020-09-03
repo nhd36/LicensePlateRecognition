@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block script %}
+<script>
+  var loadFile = function(event) {
+    var output = document.getElementById('output');
+    output.src = URL.createObjectURL(event.target.files[0]);
+    output.onload = function() {
+      URL.revokeObjectURL(output.src) // free memory
+    }
+  };
+</script>
+{% endblock %}
+
+{% block title%}
+<div class="jumbotron" style="text-align:center;background:#9EE8DB;">
+	<h1 class="display-3">OCR HandWritten App</h1>
+	<p class="lead" id="chntxt">This is a simple OCR app, API feature is also available:</p>
+</div>
+{% endblock %}
+
+{% block body %}
+<div>
+	{% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for message in messages %}
+        <div class="w3-container w3-card w3-round w3-margin jumbotron" style="color:red;text-align:center;background:#9EE8DB;">
+            {{ message }}
+        </div>
+      {% endfor %}
+  	{% endif %}
+	{% endwith %}
+	<br>
+</div>
+<div class="input-group image-preview">
+	<form action = {{url_for("upload_file")}} method = "POST" enctype = "multipart/form-data">
+		<div class="input-group form-group">
+		  <div class="input-group-prepend">
+		    <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+		  </div>
+		  <div class="custom-file">
+		    <input type="file" class="custom-file-input" name="file" accept="image/*" onchange="loadFile(event)" aria-describedby="inputGroupFileAddon01">
+		    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+		  </div>
+		</div>
+		<div style="margin-top:20px;">
+			<img id="output"/>
+		</div>
+		<br>
+		<div style="margin-bottom: 20px;">
+			<input type="Submit" class="btn btn-primary" style="font-size: 15px; padding:15px;"/>
+		</div>
+	</form>
+</div>
+
+{% endblock %}
