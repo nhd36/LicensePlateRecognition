@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from werkzeug.utils import secure_filename
+from models.LicenseRecognizeModel import predict_license_plate
 import os
-import cv2
 import secrets
 
 UPLOAD_FOLDER  = "upload_images"
@@ -25,16 +25,18 @@ def upload_file():
             flash("No file part")
             return redirect(url_for("upload_file"))
         file = request.files["file"]
-        print(type(file))
+        print(file.filename)
         if file.filename == "":
             flash("No file selected")
             return redirect(url_for("upload_file"))
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+            license_plate = predict_license_plate(f"upload_images/{file.filename}")
             flash("Uploaded File Completed")
-            return redirect(url_for("upload_file"))
-    return render_template("upload.html", title="OCR - HandWritten")
+            return render_template("upload.html", title="License Plate Scan", result=license_plate)
+    return render_template("upload.html", title="License Plate Scan")
+
 
 if __name__ == "__main__":
     app.run(debug=True)

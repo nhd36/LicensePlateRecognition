@@ -14,8 +14,8 @@
 
 {% block title%}
 <div class="jumbotron" style="text-align:center;background:#9EE8DB;">
-	<h1 class="display-3">OCR HandWritten App</h1>
-	<p class="lead" id="chntxt">This is a simple OCR app, API feature is also available:</p>
+	<h1 class="display-3">License Plate Scan App</h1>
+	<p class="lead" id="chntxt">This is a simple License Plate Scan app, API feature is also available:</p>
 </div>
 {% endblock %}
 
@@ -24,7 +24,7 @@
 	{% with messages = get_flashed_messages() %}
     {% if messages %}
       {% for message in messages %}
-        <div class="w3-container w3-card w3-round w3-margin jumbotron" style="color:red;text-align:center;background:#9EE8DB;">
+        <div class="w3-container w3-card w3-round w3-margin" style="color:red;text-align:center;background:#9EE8DB;">
             {{ message }}
         </div>
       {% endfor %}
@@ -32,7 +32,7 @@
 	{% endwith %}
 	<br>
 </div>
-<div class="input-group image-preview">
+<div class="input-group image-preview" style="width: 50%; float: left;">
 	<form action = {{url_for("upload_file")}} method = "POST" enctype = "multipart/form-data">
 		<div class="input-group form-group">
 		  <div class="input-group-prepend">
@@ -52,5 +52,12 @@
 		</div>
 	</form>
 </div>
-
+<div style="width = 50%; float: right;">
+  {% if result %}
+    <h1 style="text-align: center;"> Your license plate:</h1>
+    <p style="font-size: 30px; text-align: center"> {{ result }} </p>
+  {% else %}
+    <h1> Please input your image </h1>
+  {% endif %}
+</div>
 {% endblock %}
