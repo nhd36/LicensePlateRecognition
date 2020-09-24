@@ -6,8 +6,7 @@ import pandas as pd
 from tensorflow.keras.models import load_model
 import matplotlib.pyplot as plt
 
-def bounding_boxes(path):
-	image = cv2.imread(path)
+def bounding_boxes(image):
 
 	# pre-process the image by resizing it, converting it to
 	# graycale, blurring it, and computing an edge map
@@ -123,11 +122,9 @@ def predict(model, mapp, images, relabel=True):
 
     return pred
 
-path = "upload_images/bien_xe4.jpg"
-
-def predict_license_plate(path):
-    letters = bounding_boxes(path)[0]
-    output = bounding_boxes(path)[1]
+def predict_license_plate(image_array):
+    letters = bounding_boxes(image_array)[0]
+    output = bounding_boxes(image_array)[1]
     up_line = separate_lines(letters, output)[0]
     down_line = separate_lines(letters, output)[1]
 
@@ -173,5 +170,5 @@ def predict_license_plate(path):
         pred_down_nums = predict(model_plate, mapp_plate, down_line_values)
         down_line = f"{pred_down_nums[0]}{pred_down_nums[1]}{pred_down_nums[2]}{pred_down_nums[3]}"
 
-    license_plate = upper_line + "\n" + down_line
+    license_plate = upper_line + " | " + down_line
     return license_plate
